@@ -10,7 +10,11 @@ datasource db {
 model Student {
   id       Int                 @id @default(autoincrement())
   name     String
-  email    String              @unique
+  document String              @unique
+  age      Int
+  gender   String
+  turn     String
+  grade    Int
   subjects SubjectEnrollment[]
   Exam     Exam[]
 }
