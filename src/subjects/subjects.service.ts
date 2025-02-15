@@ -1,6 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateSubjectDto } from './dto/create-subject.dto';
+import { UpdateSubjectDTO } from './dto/update-subject.dto';
 
 @Injectable()
 export class SubjectsService {
@@ -27,10 +28,13 @@ export class SubjectsService {
     return subject;
   }
 
-  async updateSubject(id: number, data: Partial<CreateSubjectDto>) {
+  async updateSubject(id: number, data: UpdateSubjectDTO) {
     await this.getSubjectById(id);
 
-    return this.prismaService.subject.update({ where: { id }, data });
+    return this.prismaService.subject.update({
+      where: { id },
+      data: data,
+    });
   }
 
   async deleteSubject(id: number) {
