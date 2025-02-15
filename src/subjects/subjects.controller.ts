@@ -17,12 +17,12 @@ export class SubjectsController {
   constructor(private readonly subjectService: SubjectsService) {}
 
   @Post()
-  async createStudent(@Body() data: CreateSubjectDto) {
+  async createSubject(@Body() data: CreateSubjectDto) {
     return this.subjectService.createSubject(data);
   }
 
   @Get()
-  async getAllStudents() {
+  async getAllSubjects() {
     return this.subjectService.getAllSubjects();
   }
 
