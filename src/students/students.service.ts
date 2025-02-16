@@ -1,46 +1,71 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
-import { CreateStudentDto } from './dto/create-student.dto';
+import {
+  Injectable,
+  NotFoundException,
+  BadRequestException,
+} from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
-import { UpdateStudentDto } from './dto/update-student.dto';
+import { CreateStudentDto } from './dto/create-student.dto';
 
 @Injectable()
 export class StudentsService {
-  constructor(private readonly prismaService: PrismaService) {}
-
-  async createStudent(data: CreateStudentDto) {
-    return this.prismaService.student.create({ data });
-  }
+  constructor(private readonly prisma: PrismaService) {}
 
   async getAllStudents() {
-    return this.prismaService.student.findMany({
-      include: { subjects: true },
-    });
+    try {
+      return await this.prisma.student.findMany();
+    } catch {
+      throw new BadRequestException('Erro ao buscar os estudantes.');
+    }
   }
 
   async getStudentById(id: number) {
-    const student = await this.prismaService.student.findUnique({
-      where: { id },
-      include: { subjects: true },
-    });
+    try {
+      const student = await this.prisma.student.findUnique({
+        where: { id },
+      });
 
-    if (!student)
-      throw new NotFoundException(`Student with ID ${id} not found`);
+      if (!student)
+        throw new NotFoundException(`Estudante com ID ${id} não encontrado.`);
 
-    return student;
+      return student;
+    } catch {
+      throw new BadRequestException('Erro ao buscar estudante.');
+    }
   }
 
-  async updateStudent(id: number, data: UpdateStudentDto) {
-    await this.getStudentById(id);
+  async createStudent(data: CreateStudentDto) {
+    try {
+      return await this.prisma.student.create({ data });
+    } catch {
+      throw new BadRequestException('Erro ao criar estudante.');
+    }
+  }
 
-    return this.prismaService.student.update({
-      where: { id },
-      data: data,
-    });
+  async updateStudent(id: number, data: Partial<CreateStudentDto>) {
+    try {
+      await this.getStudentById(id);
+
+      const updatedData = {
+        ...data,
+        age: data.age !== undefined ? Number(data.age) : undefined,
+        grade: data.grade !== undefined ? Number(data.grade) : undefined,
+      };
+
+      return await this.prisma.student.update({
+        where: { id },
+        data: updatedData,
+      });
+    } catch {
+      throw new BadRequestException('Erro ao atualizar estudante.');
+    }
   }
 
   async deleteStudent(id: number) {
-    await this.getStudentById(id);
-
-    return this.prismaService.student.delete({ where: { id } });
+    try {
+      await this.getStudentById(id);
+      return await this.prisma.student.delete({ where: { id } });
+    } catch {
+      throw new BadRequestException('Erro ao excluir estudante.');
+    }
   }
 }

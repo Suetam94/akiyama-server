@@ -10,7 +10,6 @@ import {
 } from '@nestjs/common';
 import { StudentsService } from './students.service';
 import { CreateStudentDto } from './dto/create-student.dto';
-import { UpdateStudentDto } from './dto/update-student.dto';
 
 @Controller('students')
 export class StudentsController {
@@ -34,7 +33,7 @@ export class StudentsController {
   @Put(':id')
   async updateStudent(
     @Param('id', ParseIntPipe) id: number,
-    @Body() data: UpdateStudentDto,
+    @Body() data: Partial<CreateStudentDto>,
   ) {
     return this.studentsService.updateStudent(id, data);
   }

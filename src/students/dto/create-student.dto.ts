@@ -1,4 +1,5 @@
-import { IsNotEmpty, IsNumber, IsString } from 'class-validator';
+import { IsNotEmpty, IsString, IsInt, Min, Max } from 'class-validator';
+import { Transform } from 'class-transformer';
 
 export class CreateStudentDto {
   @IsNotEmpty()
@@ -10,7 +11,10 @@ export class CreateStudentDto {
   document: string;
 
   @IsNotEmpty()
-  @IsNumber()
+  @Transform(({ value }) => Number(value))
+  @IsInt()
+  @Min(1)
+  @Max(120)
   age: number;
 
   @IsNotEmpty()
@@ -18,10 +22,13 @@ export class CreateStudentDto {
   gender: string;
 
   @IsNotEmpty()
-  @IsNumber()
-  grade: number;
-
-  @IsNotEmpty()
   @IsString()
   turn: string;
+
+  @IsNotEmpty()
+  @Transform(({ value }) => Number(value))
+  @IsInt()
+  @Min(1)
+  @Max(12)
+  grade: number;
 }
