@@ -64,9 +64,8 @@ export class ExamsService {
 
   async updateExam(id: number, data: Partial<CreateExamDto>) {
     try {
-      await this.getExamById(id); // Verifica se a prova existe antes de atualizar
+      await this.getExamById(id);
 
-      // Garante que os valores são numéricos antes de enviar para o banco
       const updatedData = {
         ...data,
         score: data.score !== undefined ? Number(data.score) : undefined,
@@ -87,7 +86,7 @@ export class ExamsService {
 
   async deleteExam(id: number) {
     try {
-      await this.getExamById(id); // Verifica se a prova existe antes de excluir
+      await this.getExamById(id);
       return this.prisma.exam.delete({ where: { id } });
     } catch {
       throw new BadRequestException('Erro ao excluir prova.');

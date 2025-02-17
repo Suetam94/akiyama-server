@@ -17,8 +17,8 @@ Este é o backend da aplicação **Gestão Acadêmica**, uma API construída com
 
 ### **1️⃣ Clonar o Repositório**
 ```sh
-git clone https://github.com/seu-repositorio.git
-cd seu-repositorio
+git clone https://github.com/Suetam94/akiyama-server.git
+cd akiyama-server
 ```
 
 ### **2️⃣ Instalar Dependências**
@@ -27,6 +27,14 @@ npm install
 ```
 
 ### **3️⃣ Configurar o Banco de Dados**
+
+### **Executar o Seed (Opcional)**
+Para popular o banco de dados com dados iniciais, execute:
+```sh
+npx prisma db seed
+```
+Isso criará matérias, estudantes e provas automaticamente.
+
 Criar um arquivo **.env** na raiz do projeto e adicionar:
 ```env
 DATABASE_URL="file:./dev.db"
@@ -105,4 +113,3 @@ A API estará disponível em **http://localhost:3000**
 Desenvolvido por **Mateus Vinícius da Silva**  
 📧 Entre em contato: **mateusviniciusdasilva@outlook.com**  
 🔗 [LinkedIn](https://www.linkedin.com/in/mateus-vin%C3%ADcius-da-silva-8156301a5/)
-
