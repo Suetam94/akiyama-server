@@ -1,56 +1,37 @@
-# compiled output
-/dist
-/node_modules
-/build
+# 🔥 Dependências do Node.js
+node_modules/
+package-lock.json
 
-# Logs
-logs
+# 🔥 Banco de Dados SQLite (evita envio do banco já populado)
+prisma/dev.db
+prisma/dev.db-journal
+
+# 🔥 Arquivos gerados pelo Prisma
+prisma/migrations/
+prisma/generated/
+
+# 🔥 Configurações locais (evita credenciais no repositório)
+.env
+.env.local
+.env.development
+.env.production
+
+# 🔥 Logs da aplicação
+logs/
 *.log
 npm-debug.log*
-pnpm-debug.log*
 yarn-debug.log*
 yarn-error.log*
-lerna-debug.log*
 
-# OS
+# 🔥 Build da aplicação (caso compile TypeScript antes do deploy)
+dist/
+build/
+
+# 🔥 Cache do editor de código (ex: VS Code)
+.vscode/
+.idea/
 .DS_Store
 
-# Tests
-/coverage
-/.nyc_output
-
-# IDEs and editors
-/.idea
-.project
-.classpath
-.c9/
-*.launch
-.settings/
-*.sublime-workspace
-
-# IDE - VSCode
-.vscode/*
-!.vscode/settings.json
-!.vscode/tasks.json
-!.vscode/launch.json
-!.vscode/extensions.json
-
-# dotenv environment variable files
-.env
-.env.development.local
-.env.test.local
-.env.production.local
-.env.local
-
-# temp directory
-.temp
-.tmp
-
-# Runtime data
-pids
-*.pid
-*.seed
-*.pid.lock
-
-# Diagnostic reports (https://nodejs.org/api/report.html)
-report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
+# 🔥 Arquivo de reset e seeds (para evitar que vá viciado)
+prisma/reset-db.ts
+prisma/seed.ts
