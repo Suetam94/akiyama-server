@@ -1,44 +1,71 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  BadRequestException,
+} from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateSubjectDto } from './dto/create-subject.dto';
-import { UpdateSubjectDTO } from './dto/update-subject.dto';
 
 @Injectable()
 export class SubjectsService {
-  constructor(private prismaService: PrismaService) {}
+  constructor(private readonly prisma: PrismaService) {}
 
   async createSubject(data: CreateSubjectDto) {
-    return this.prismaService.subject.create({ data });
+    try {
+      return await this.prisma.subject.create({ data });
+    } catch {
+      throw new BadRequestException('Erro ao criar matéria.');
+    }
   }
 
   async getAllSubjects() {
-    return this.prismaService.subject.findMany();
+    try {
+      return await this.prisma.subject.findMany();
+    } catch {
+      throw new BadRequestException('Erro ao buscar matérias.');
+    }
   }
 
   async getSubjectById(id: number) {
-    const subject = await this.prismaService.subject.findUnique({
-      where: { id },
-      include: { exams: true },
-    });
+    try {
+      const subject = await this.prisma.subject.findUnique({
+        where: { id },
+        include: { exams: true },
+      });
 
-    if (!subject) {
-      throw new NotFoundException(`Subject with ID ${id} not found`);
+      if (!subject)
+        throw new NotFoundException(`Matéria com ID ${id} não encontrada.`);
+
+      return subject;
+    } catch {
+      throw new BadRequestException('Erro ao buscar matéria.');
     }
-
-    return subject;
   }
 
-  async updateSubject(id: number, data: UpdateSubjectDTO) {
-    await this.getSubjectById(id);
+  async updateSubject(id: number, data: Partial<CreateSubjectDto>) {
+    try {
+      await this.getSubjectById(id);
 
-    return this.prismaService.subject.update({
-      where: { id },
-      data: data,
-    });
+      const updatedData = {
+        ...data,
+        name: data.name ? String(data.name).trim() : undefined,
+      };
+
+      return await this.prisma.subject.update({
+        where: { id },
+        data: updatedData,
+      });
+    } catch {
+      throw new BadRequestException('Erro ao atualizar matéria.');
+    }
   }
 
   async deleteSubject(id: number) {
-    await this.getSubjectById(id);
-    return this.prismaService.subject.delete({ where: { id } });
+    try {
+      await this.getSubjectById(id);
+      return await this.prisma.subject.delete({ where: { id } });
+    } catch {
+      throw new BadRequestException('Erro ao excluir matéria.');
+    }
   }
 }
